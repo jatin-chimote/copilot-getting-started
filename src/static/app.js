@@ -20,11 +20,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
+        // Create participants section safely
+        const participantsSection = document.createElement("div");
+        participantsSection.className = "participants-section";
+        const participantsLabel = document.createElement("strong");
+        participantsLabel.textContent = "Participants:";
+        participantsSection.appendChild(participantsLabel);
+        if (details.participants.length > 0) {
+          const ul = document.createElement("ul");
+          ul.className = "participants-list";
+          details.participants.forEach(email => {
+            const li = document.createElement("li");
+            li.textContent = email;
+            ul.appendChild(li);
+          });
+          participantsSection.appendChild(ul);
+        } else {
+          const p = document.createElement("p");
+          p.className = "no-participants";
+          p.textContent = "No participants yet.";
+          participantsSection.appendChild(p);
+        }
+
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          ${participantsHTML}
         `;
 
         activitiesList.appendChild(activityCard);
